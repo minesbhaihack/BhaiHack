@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, initial-scale=1.0, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="MobileOptimized" content="176" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="robots" content="noindex,nofollow" />
+    <script src="https://telegram.org/js/telegram-web-app.js?2"></script>
+    <title>Интерактивная страница</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+      <style>
+        @font-face {
+            font-family: 'Intro';
+            src: url('intro.otf') format('opentype');
+        }
+
+        body {
+            background-image: url('fon.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .main-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%; /* Slightly smaller than before */
+            height: 100%;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #0a101e;
+            border-radius: 12px; /* Smaller radius */
+            padding: 8px; /* Smaller padding */
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05), 0 0 8px 4px #ffa500; /* Subtler shadow */
+            position: relative;
+            width: fit-content;
+            height: fit-content;
+        }
+
+        /* LOADER ANIMATION FOR PICTURES */
+
+        .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none; /* Initially hidden */
+    z-index: 10;
+    width:220px;
+    height: 220px;
+    perspective: 1200px;
+}
+
+.loader div[class^="atom"] {
+    width:220px;
+    height: 220px;
+    border-radius: 50%;
+    border-width: 4px;
+    position: absolute;
+    box-sizing: border-box;
+    transform-style: preserve-3d;
+}
+
+.loader .atom-1 {
+    left: 0; top: 0;
+    border-bottom-style: solid;
+    border-bottom-color: #ffa500;
+    animation: spin1 1s linear infinite;
+}
+
+.loader .atom-2 {
+    right: 0; top: 0;
+    border-right-style: solid;
+    border-right-color: #ffa500;
+    animation: spin2 1.2s linear infinite;
+}
+
+.loader .atom-3 {
+    right: 0; bottom: 0;
+    border-top-style: solid;
+    border-top-color: #ffa500;
+    animation: spin3 1.4s linear infinite;
+}
+
+@keyframes spin1 {
+    0% {
+        transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+    }
+    100% {
+        transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+    }
+}
+
+@keyframes spin2 {
+    0% {
+        transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+    }
+    100% {
+        transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+    }
+}
+
+@keyframes spin3 {
+    0% {
+        transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+    }
+    100% {
+        transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+    }
+}
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 45px); /* Smaller cells */
+            grid-template-rows: repeat(5, 45px);
+            gap: 7px; /* Smaller gaps */
+        }
+
+        .square {
+            background-color: #238fa9;
+            border-radius: 4px; /* Smaller border radius */
+            transition: background-color 0.5s ease;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 15px 30px; /* Reduced padding */
+            border: none;
+            border-radius: 6px; /* Smaller radius */
+            background-color: #000000;
+            color: white;
+            font-size: 20px; /* Reduced font size */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 3.5px rgba(0, 0, 0, 0.15); /* Subtler shadow */
+            font-family: 'Intro', sans-serif;
+            text-align: center;
+            line-height: 1.1; /* Closer line height */
+        }
+
+        button:hover, button:focus {
+            background-color: #0056b3;
+            box-shadow: 0 2.5px 5px rgba(0, 0, 0, 0.25); /* Subtle change on hover */
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            background-color: #004885;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Less shadow on active */
+            transform: translateY(0.5px);
+        }
+
+        #trap-count-label {
+            margin-top: 20px;
+            font-size: 26px; /* Smaller font size */
+            color: white;
+            font-family: 'Intro', sans-serif;
+            font-weight: bold;
+        }
+
+        #counter-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+            width: 674px;
+        }
+
+        .count-display {
+            width: 35px; /* Smaller width */
+            text-align: center;
+            font-size: 45px; /* Smaller font size */
+            font-family: 'Intro', sans-serif;
+            color: white;
+            margin-left: 12px; /* Smaller margins */
+        }
+
+        .icon {
+            cursor: pointer;
+            width: 50px; /* Smaller icons */
+            height: 50px;
+        }
+
+        #loading-text {
+            cursor: default;
+            text-align: center;
+            margin-bottom: 8px; /* Smaller bottom margin */
+            /* font-family: 'Intro', sans-serif; */
+        }
+
+        .bot_name {
+            display: flex;
+            align-items: center;
+            margin-top: 30px;
+            cursor: pointer;
+        }
+
+        .telegram-icon{
+            margin-right: 10px;
+            width: 50px;
+            height: 50px;
+        }
+
+        #botName {
+            font-size: 30px;
+            font-weight: bolder;
+            color: #ffa500;
+            text-transform: lowercase;
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        #loading-text span {
+            display: inline-block;
+            animation: bounce 0.3s ease infinite alternate;
+            font-size: 40px; /* Smaller font size */
+            color: rgb(209, 178, 5);
+            text-shadow: 0 0.25px 0 #ccc, 0 0.5px 0 #ccc, 0 0.75px 0 #ccc, 0 1px 0 #ccc,
+                        0 1.25px 0 #ccc, 0 1.5px 0 transparent, 0 1.75px 0 transparent, 0 2px 0 transparent,
+                        0 2.25px 0 transparent, 0 2.5px 2.5px rgba(0, 0, 0, 0.2);
+        }
+
+        #loading-text span:nth-child(1) { animation-delay: 0s; }
+        #loading-text span:nth-child(2) { animation-delay: 0.1s; }
+        #loading-text span:nth-child(3) { animation-delay: 0.2s; }
+        #loading-text span:nth-child(4) { animation-delay: 0.3s; }
+        #loading-text span:nth-child(5) { animation-delay: 0.4s; }
+        #loading-text span:nth-child(6) { animation-delay: 0.5s; }
+        #loading-text span:nth-child(7) { animation-delay: 0.6s; }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0px);
+                text-shadow: 0 0.25px 0 #ccc, 0 0.5px 0 #ccc, 0 0.75px 0 #ccc, 0 1px 0 #ccc,
+                             0 1.25px 0 #ccc, 0 1.5px 0 transparent, 0 1.75px 0 transparent, 0 2px 0 transparent,
+                             0 2.25px 0 transparent, 0 2.5px 2.5px rgba(0, 0, 0, 0.2);
+            }
+            100% {
+                transform: translateY(-5px);
+                text-shadow: 0 0.25px 0 #ccc, 0 0.5px 0 #ccc, 0 0.75px 0 #ccc, 0 1px 0 #ccc,
+                             0 1.25px 0 #ccc, 0 1.5px 0 transparent, 0 1.75px 0 transparent, 0 2px 0 transparent,
+                             0 2.25px 0 transparent, 0 12.5px 6.25px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        .deactive {
+            opacity: 0;
+            transition: 0.1s;
+        }
+
+        .active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .img-signal {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            transition: 0.1s;
+            z-index: 30;
+            transition: opacity 0.3s ease-in-out; /* Smooth fade transition */
+            opacity: 1; /* Default opacity */
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 30%; /* Увеличенная длина слайдера */
+            height: 20px; /* Увеличенная высота слайдера */
+            background: linear-gradient(to right, #57c1eb, #246fa8);
+            outline: none;
+            opacity: 0.9;
+            transition: opacity .4s ease, background 0.4s ease;
+            border-radius: 14px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16);
+        }
+
+        .slider:hover {
+            opacity: 1;
+            background: linear-gradient(to right, #4ebbf1, #1a5f97);
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 32px; /* Увеличенная ширина ползунка */
+            height: 32px; /* Увеличенная высота ползунка */
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 0 30px 12px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 36px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 75px; /* Увеличенная ширина ползунка */
+            height: 75px; /* Увеличенная высота ползунка */
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 0 30px 12px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 36px 15px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+         <h1 id="loading-text">
+        <span>B</span><span>H</span><span>A</span><span>I</span><span>H</span><span>A</span><span>C</span><span>K</span>
+        </h1>
+        <div class="container">
+            <div class="loader" id="loader">
+                <div class="atom-1"></div>
+                <div class="atom-2"></div>
+                <div class="atom-3"></div>
+            </div>
+            <img draggable="false" src="assets/images/default.jpg" id="img-signal" alt="signal" class="img-signal">
+        </div>
+        <div id="trap-count-label">NÚMERO DE MINAS</div>
+        <div id="counter-container">
+            <input type="range" min="1" max="20" step="1" value="10" class="slider" id="trapSlider">
+            <div id="slider-value" class="count-display">10</div>
+        </div>
+        <button id="buttonGetSignal" onclick="getSignal()">RECIBIR<br>SEÑAL</button>
+        <div class="bot_name">
+            <svg class="telegram-icon" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 48 48" width="30" height="30">
+                <path fill="#29b6f6" d="M24,4C13,4,4,13,4,24s9,20,20,20s20-9,20-20S35,4,24,4z"></path>
+                <path fill="#fff" d="M34,15l-3.7,19.1c0,0-0.2,0.9-1.2,0.9c-0.6,0-0.9-0.3-0.9-0.3L20,28l-4-2l-5.1-1.4c0,0-0.9-0.3-0.9-1  c0-0.6,0.9-0.9,0.9-0.9l21.3-8.5c0,0,0.7-0.2,1.1-0.2c0.3,0,0.6,0.1,0.6,0.5C34,14.8,34,15,34,15z">
+                </path>
+                <path fill="#b0bec5" d="M23,30.5l-3.4,3.4c0,0-0.1,0.1-0.3,0.1c-0.1,0-0.1,0-0.2,0l1-6L23,30.5z"></path>
+                <path fill="#cfd8dc" d="M29.9,18.2c-0.2-0.2-0.5-0.3-0.7-0.1L16,26c0,0,2.1,5.9,2.4,6.9c0.3,1,0.6,1,0.6,1l1-6l9.8-9.1  C30,18.7,30.1,18.4,29.9,18.2z">
+                </path>
+            </svg>
+    <span id="botName" style="display: block;"><span>@</span>minesbhaihack</span>
+</div>
+    </div>
+    <audio id="sound-effect" src="1.mp3"></audio> <!-- Звуковой эффект для воспроизведения -->
+
+   <script>
+    let count = 3; // Начальное количество ловушек
+    const countElement = document.getElementById('count');
+    const sliderValue = document.getElementById('slider-value');
+    const trapSlider = document.getElementById('trapSlider');
+    const soundEffect = document.getElementById('sound-effect');
+
+    // Обновление отображаемого значения слайдера
+    trapSlider.oninput = function() {
+        sliderValue.textContent = this.value;
+        count = parseInt(this.value); // Обновление переменной количества ловушек
+    }
+
+    // Функция увеличения количества ловушек
+    function increment() {
+        const validTraps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]; // Допустимые значения количества ловушек
+        let currentIndex = validTraps.indexOf(count);
+        if (currentIndex < validTraps.length - 1) {
+            count = validTraps[currentIndex + 1];
+            countElement.textContent = count;
+        }
+    }
+
+    // Функция уменьшения количества ловушек
+    function decrement() {
+        const validTraps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]; // Допустимые значения количества ловушек
+        let currentIndex = validTraps.indexOf(count);
+        if (currentIndex > 0) {
+            count = validTraps[currentIndex - 1];
+            countElement.textContent = count;
+        }
+    }
+
+    // Создание ячеек на сетке
+    function createSquares() {
+        const grid = document.getElementById('grid');
+        for (let i = 0; i < 25; i++) {
+            const square = document.createElement('div');
+            square.className = 'square';
+            grid.appendChild(square);
+        }
+    }
+
+    // Определение количества ячеек для открытия в зависимости от количества ловушек
+    function squaresToOpen() {
+        switch (count) {
+            case 1:
+                return 1; // Если выбрана 1 ловушка, открываем 10 ячеек
+            case 2:
+                return 2;
+            case 3:
+                return 3;
+            case 4:
+                return 4;
+            case 5:
+                return 5;
+            case 6:
+                return 6;
+            case 7:
+                return 7;
+            case 8:
+                return 8;
+            case 9:
+                return 9;
+            case 10:
+                return 10;
+            case 11:
+                return 11;
+            case 12:
+                return 12;
+            case 13:
+                return 13;
+            case 14:
+                return 14;
+            case 15:
+               return 15;
+            case 16:
+                return 16;
+            case 17:
+                return 17;
+            case 18:
+                return 18;  // Если выбрано 3 ловушки, открываем 5 ячеек
+            case 19:
+                return 19;  // Если выбрано 5 ловушек, открываем 4 ячейки
+            case 20:
+                return 20;  // Если выбрано 7 ловушек, открываем 3 ячейки
+            default:
+                return 3;  // Значение по умолчанию
+        }
+    }
+
+    // Функция, запускающая процесс открытия ячеек и воспроизведение звука
+    // let buttonGetSignal = document.getElementById("get-signal");
+    // let loadingSignal = document.getElementById("loading");
+    // let screenStart = document.getElementById("screenStart");
+    let signal = document.getElementById("img-signal");
+    // function getSignal() {
+    //     // buttonGetSignal.disabled = true;
+    //     const randomPhotoNumber = Math.floor(Math.random() * (20 - 1) + 1);
+    //     signal.src = `assets/images/file${count}/${randomPhotoNumber}.jpg`;
+    //     signal.classList.add("active")
+    // }
+
+    function getSignal() {
+    const loader = document.getElementById('loader');
+    const signal = document.getElementById('img-signal');
+    const buttonGetSignal = document.getElementById('buttonGetSignal');
+
+    // Disable the button while loading
+    buttonGetSignal.disabled = true;
+
+    // Show the loader
+    loader.style.display = 'block';
+
+    // Hide the current image
+    signal.style.opacity = 0;
+
+    // Generate a random image URL
+    const randomPhotoNumber = Math.floor(Math.random() * (20 - 1) + 1);
+    const imageUrl = `assets/images/file${count}/${randomPhotoNumber}.jpg`;
+
+    // Set a timeout to update the image after 1 second
+    setTimeout(() => {
+        // Update the image source
+        signal.src = imageUrl;
+
+        // Fade in the new image
+        signal.style.opacity = 1;
+
+        // Hide the loader
+        loader.style.display = 'none';
+
+        // Re-enable the button
+        buttonGetSignal.disabled = false;
+    }, 1000); // 1000 milliseconds = 1 second
+}
+
+
+
+
+
+</script>
+</body>
+</html>
