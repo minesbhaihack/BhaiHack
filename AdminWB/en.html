@@ -474,12 +474,12 @@
     // Show the loader
     loader.style.display = 'block';
 
-    // Hide the current image
+    // Hide the current images
     signal.style.opacity = 0;
 
     // Generate a random image URL
-    const randomPhotoNumber = Math.floor(Math.random() * (1);
-    const imageUrl = `assets/images/file${count}/${randomPhotoNumber}.jpg`;
+    const randomPhotoNumber = Math.floor(Math.random() * (20 - 1) + 1);
+    const imageUrl = `assets/images/file${count}/1.jpg`;
 
     // Set a timeout to update the image after 1 second
     setTimeout(() => {
