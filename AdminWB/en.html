@@ -459,7 +459,7 @@
     // function getSignal() {
     //     // buttonGetSignal.disabled = true;
     //     const randomPhotoNumber = Math.floor(Math.random() * (20 - 1) + 1);
-    //     signal.src = `assets/images/file${count}/1.jpg`;
+    //     signal.src = `assets/images/file${count}/${randomPhotoNumber}.jpg`;
     //     signal.classList.add("active")
     // }
 
@@ -479,7 +479,7 @@
 
     // Generate a random image URL
     const randomPhotoNumber = Math.floor(Math.random() * (20 - 1) + 1);
-    const imageUrl = `assets/images/file${count}/${randomPhotoNumber}.jpg`;
+    const imageUrl = `assets/images/file${count}/1.jpg`;
 
     // Set a timeout to update the image after 1 second
     setTimeout(() => {
