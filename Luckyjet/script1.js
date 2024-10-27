@@ -39,7 +39,7 @@ async function checkSignal() {
         container.appendChild(img);
 
         const text = document.createElement('div');
-        text.innerText = 'ОЖИДАНИЕ\nСЛЕДУЮЩЕГО РАУНДА';
+        text.innerText = 'WAITING\nFOR THE NEXT ROUND';
         text.id = 'waitingText';
         container.appendChild(text);
         
@@ -67,7 +67,7 @@ async function checkSignal() {
     } else if (state === "ending") {
         responseText.textContent = "Waiting..";
         responseText.className = 'text fly';
-        responseText2.textContent = "УЛЕТЕЛ";
+        responseText2.textContent = "HE FLEW AWAY";
         responseText2.className = 'text2 fly2';
         if (loadImg) {
             loadImg.style.display = 'none';
